@@ -39,7 +39,7 @@ export class Trie extends TrieNode {
     super(null)
   }
 
-  get attributes() {
+  get attributes(): Record<string, string | Record<string, TrieNode>> {
     return {
       value: this.value,
       children: this.children
@@ -79,7 +79,7 @@ export class Trie extends TrieNode {
     }
   }
 
-  getRemainingTree(word: string) {
+  getRemainingTree(word: string): TrieNode {
     let node: TrieNode = this
     while(word) {
       node = node.getChild(word[0])
