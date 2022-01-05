@@ -1,22 +1,26 @@
 #!/usr/bin/env node
 
 import { Trie } from './DataStructures/Trie'
+import { testTrie } from './Tests/testTrie'
 
 export class RunDataStructures {
   constructor() {}
 
   async execute(): Promise<boolean> {
-    const testTrie = new Trie()
-    /*
-    await testTrie.insertWord('computer')
-    await testTrie.insertWord('car')
-    await testTrie.insertWord('comet')
-    */
-    await testTrie.insertWord('riley')
-    await testTrie.insertWord('bell')
-    //console.log(JSON.stringify(testTrie.attributes, null, 2))
+    const args = process.argv
+    if(args.length < 3)
+      throw new Error('Missing search word')
+    
+    const searchword = args[2]
 
-    const wordSearch = await testTrie.searchWord('riley')
+    const trie = new Trie()
+    for (const word of testTrie) {
+      trie.insertWord(word)
+    }
+
+    console.log(JSON.stringify(trie.attributes, null, 2))
+
+    const wordSearch = await trie.searchWord(searchword)
     console.log('wordSearch:', wordSearch)
     return true
   }

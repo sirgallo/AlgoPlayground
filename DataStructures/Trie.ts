@@ -59,7 +59,7 @@ export class Trie extends TrieNode {
       const remainingTree = this.getRemainingTree(word)
       //console.log(JSON.stringify({ remainingTree: remainingTree }, null, 2))
       if(remainingTree) {
-        this.allWordsHelper('', remainingTree)
+        this.allWordsHelper(word, remainingTree)
       }
 
       resolve(this.words)
@@ -83,10 +83,12 @@ export class Trie extends TrieNode {
     let node: TrieNode = this
     while(word) {
       node = node.getChild(word[0])
+      //console.log('build node:', JSON.stringify(node, null, 2))
       word = word.substring(1)
+      //console.log('word:', word)
     }
 
-    console.log('node:', JSON.stringify(node, null, 2))
+    //console.log('node:', JSON.stringify(node, null, 2))
     return node
   }
 
@@ -97,6 +99,7 @@ export class Trie extends TrieNode {
       const newStr = wordSoFar + child.getValue()
       //console.log('new String:', newStr)
       if(child.getEnd()) {
+        //console.log('hi')
         this.words.push(newStr)
       }
 
