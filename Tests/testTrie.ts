@@ -1,10 +1,11 @@
 export const testTrie: string[] = [
-  'hell',
   'hello',
+  'hell',
   'world',
   'hi',
   'car',
   'comet',
+  'computer',
   'compute',
-  'computer'
+  'computed'
 ]

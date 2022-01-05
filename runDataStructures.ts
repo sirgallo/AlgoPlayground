@@ -16,7 +16,7 @@ export class RunDataStructures {
     const trie = new Trie()
     await trie.bulkInsert(testTrie)
 
-    //trie.print()
+    trie.print()
     const wordSearch = await trie.searchWord(searchword)
     console.log('wordSearch:', wordSearch)
     

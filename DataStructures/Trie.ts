@@ -80,8 +80,13 @@ export class Trie extends TrieNode {
   }
 
   insertWordHelper(node: TrieNode, str: string) {
+    console.log('string', str)
     if(!node.getChild(str[0])) {
       node.setChild(str[0])
+      if(str.length == 1) {
+        node.getChild(str[0]).setEnd(true)
+      }
+    } else {
       if(str.length == 1) {
         node.getChild(str[0]).setEnd(true)
       }
