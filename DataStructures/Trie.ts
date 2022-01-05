@@ -55,10 +55,7 @@ export class Trie extends TrieNode {
 
   async bulkInsert(words: string[]): Promise<boolean> {
     return await new Promise(async resolve => {
-      for (const word of words) {
-        console.log(word)
-        await this.insertWord(word)
-      }
+      words.forEach(async word => await this.insertWord(word))
       resolve(true)
     })
   }
