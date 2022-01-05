@@ -1,6 +1,6 @@
 export const testTrie: string[] = [
-  'hello',
   'hell',
+  'hello',
   'world',
   'hi',
   'car',

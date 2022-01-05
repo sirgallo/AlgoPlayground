@@ -20,7 +20,7 @@ class TrieNode {
     return this.children[field]
   }
 
-  setChildren(field: string) {
+  setChild(field: string) {
     this.children[field] = new TrieNode(field)
   }
 
@@ -79,9 +79,9 @@ export class Trie extends TrieNode {
     })
   }
 
-  insertWordHelper(node: TrieNode, str: string | string[]) {
+  insertWordHelper(node: TrieNode, str: string) {
     if(!node.getChild(str[0])) {
-      node.setChildren(str[0])
+      node.setChild(str[0])
       if(str.length == 1) {
         node.getChild(str[0]).setEnd(true)
       }
