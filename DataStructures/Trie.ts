@@ -1,3 +1,5 @@
+import { rejects } from "assert"
+
 class TrieNode {
   protected value: string
   protected children: Record<string, TrieNode>
@@ -54,28 +56,40 @@ export class Trie extends TrieNode {
   }
 
   async bulkInsert(words: string[]): Promise<boolean> {
-    return await new Promise(async resolve => {
-      words.forEach(async word => await this.insertWord(word))
-      resolve(true)
+    return await new Promise(async (resolve, reject) => {
+      try {
+        words.forEach(async word => await this.insertWord(word))
+        resolve(true)
+      } catch (err) {
+        reject(err)
+      }
     })
   }
 
   async insertWord(word: string): Promise<boolean> {
-    return await new Promise(resolve => {
-      this.insertWordHelper(this, word)
-      resolve(true)
+    return await new Promise((resolve, reject) => {
+      try {
+        this.insertWordHelper(this, word)
+        resolve(true)
+      } catch (err) {
+        reject(err)
+      }
     })
   }
 
   async searchWord(word: string): Promise<string[]> {
     this.words = []
-    return await new Promise(resolve => {
-      const remainingTree = this.getRemainingTree(word)
-      if(remainingTree) {
-        this.allWordsHelper(word, remainingTree)
-      }
+    return await new Promise((resolve, reject) => {
+      try {
+        const remainingTree = this.getRemainingTree(word)
+        if(remainingTree) {
+          this.allWordsHelper(word, remainingTree)
+        }
 
-      resolve(this.words)
+        resolve(this.words)
+      } catch (err) {
+        reject(err)
+      }
     })
   }
 
