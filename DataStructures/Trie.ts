@@ -46,7 +46,24 @@ export class Trie extends TrieNode {
     }
   }
 
-  async insertWord(word: string | string[]): Promise<boolean> {
+  print() {
+    console.log('##############################\n')
+    console.log('Current Trie State\n')
+    console.log(JSON.stringify(this.attributes, null, 2))
+    console.log('\n##############################\n')
+  }
+
+  async bulkInsert(words: string[]): Promise<boolean> {
+    return await new Promise(async resolve => {
+      for (const word of words) {
+        console.log(word)
+        await this.insertWord(word)
+      }
+      resolve(true)
+    })
+  }
+
+  async insertWord(word: string): Promise<boolean> {
     return await new Promise(resolve => {
       this.insertWordHelper(this, word)
       resolve(true)
@@ -57,7 +74,6 @@ export class Trie extends TrieNode {
     this.words = []
     return await new Promise(resolve => {
       const remainingTree = this.getRemainingTree(word)
-      //console.log(JSON.stringify({ remainingTree: remainingTree }, null, 2))
       if(remainingTree) {
         this.allWordsHelper(word, remainingTree)
       }
@@ -83,23 +99,17 @@ export class Trie extends TrieNode {
     let node: TrieNode = this
     while(word) {
       node = node.getChild(word[0])
-      //console.log('build node:', JSON.stringify(node, null, 2))
       word = word.substring(1)
-      //console.log('word:', word)
     }
 
-    //console.log('node:', JSON.stringify(node, null, 2))
     return node
   }
 
   allWordsHelper(wordSoFar: string, tree: TrieNode) {
     for(const field in tree.getChildren()) {
       const child = tree.getChildren()[field]
-      //console.log("Child:", JSON.stringify(child, null, 2))
       const newStr = wordSoFar + child.getValue()
-      //console.log('new String:', newStr)
       if(child.getEnd()) {
-        //console.log('hi')
         this.words.push(newStr)
       }
 

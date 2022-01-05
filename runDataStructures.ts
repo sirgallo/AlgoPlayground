@@ -14,14 +14,12 @@ export class RunDataStructures {
     const searchword = args[2]
 
     const trie = new Trie()
-    for (const word of testTrie) {
-      trie.insertWord(word)
-    }
+    await trie.bulkInsert(testTrie)
 
-    console.log(JSON.stringify(trie.attributes, null, 2))
-
+    trie.print()
     const wordSearch = await trie.searchWord(searchword)
     console.log('wordSearch:', wordSearch)
+    
     return true
   }
 }
