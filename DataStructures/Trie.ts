@@ -93,9 +93,7 @@ export class Trie extends TrieNode {
     return await new Promise((resolve, reject) => {
       try {
         const remainingTree = this.getRemainingTree(word)
-        if(remainingTree) {
-          this.allWordsHelper(word, remainingTree)
-        }
+        if(remainingTree) this.allWordsHelper(word, remainingTree)
 
         resolve(this.words)
       } catch (err) {
@@ -105,20 +103,11 @@ export class Trie extends TrieNode {
   }
 
   insertWordHelper(node: TrieNode, str: string) {
-    if(!node.getChild(str[0])) {
-      node.setChild(str[0])
-      if(str.length == 1) {
-        node.getChild(str[0]).setEnd(true)
-      }
-    } else {
-      if(str.length == 1) {
-        node.getChild(str[0]).setEnd(true)
-      }
-    }
+    if(!node.getChild(str[0])) node.setChild(str[0])
 
-    if(str.length > 1) {
-      this.insertWordHelper(node.getChild(str[0]), str.slice(1))
-    }
+    if(str.length == 1) node.getChild(str[0]).setEnd(true)
+    
+    if(str.length > 1) this.insertWordHelper(node.getChild(str[0]), str.slice(1))
   }
 
   getRemainingTree(word: string): TrieNode {
@@ -135,9 +124,7 @@ export class Trie extends TrieNode {
     for(const field in tree.getChildren()) {
       const child = tree.getChildren()[field]
       const newStr = wordSoFar + child.getValue()
-      if(child.getEnd()) {
-        this.words.push(newStr)
-      }
+      if(child.getEnd()) this.words.push(newStr)
 
       this.allWordsHelper(newStr, child)
     }

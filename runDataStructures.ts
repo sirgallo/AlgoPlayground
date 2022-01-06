@@ -8,8 +8,7 @@ export class RunDataStructures {
 
   async execute(): Promise<boolean> {
     const args = process.argv
-    if(args.length < 3)
-      throw new Error('Missing search word')
+    if(args.length < 3) throw new Error('Missing search word')
     
     const searchword = args[2]
 
