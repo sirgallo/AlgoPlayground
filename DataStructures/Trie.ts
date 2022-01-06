@@ -1,5 +1,3 @@
-import { rejects } from "assert"
-
 class TrieNode {
   protected value: string
   protected children: Record<string, TrieNode>
