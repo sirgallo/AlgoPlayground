@@ -1,3 +1,13 @@
+/*
+  Individual nodes within the trie data structure
+  
+  Each is built to hold 
+    - a value, in this case a single character
+    - a child object, which holds nested nodes. The end of the word is empty
+    - end, a truthy value to assign the end of a word
+
+  Methods are getters and setters
+*/
 class TrieNode {
   protected value: string
   protected children: Record<string, TrieNode>
@@ -33,8 +43,11 @@ class TrieNode {
   }
 }
 
+/*
+  The Trie data structure, which is built using individual nodes
+*/
 export class Trie extends TrieNode {
-  words: string[]
+  private words: string[]
   constructor() {
     super(null)
   }
