@@ -22,7 +22,7 @@ export class RunDataStructures {
     const wordSearch = await trie.searchWord(searchword)
     console.log('wordSearch:', wordSearch)
     */
-    const personIndex = new FindTownJudge().run(3, [[1, 3], [2, 3], [3, 1]])
+    const personIndex = new FindTownJudge().run(3, [[1, 3], [3, 4], [2, 4]])
     console.log(personIndex)
     return true
   }
