@@ -8,7 +8,6 @@ export class FindTownJudge {
       --voteTallies[personA]
       ++voteTallies[personB]
     }
-    
     for (const [person, votes] of voteTallies.splice(0).entries())
       if (votes === numPeople - 1) return person
     return -1
