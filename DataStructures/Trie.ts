@@ -71,9 +71,7 @@ export class Trie extends TrieNode {
       try {
         words.forEach(async word => await this.insertWord(word))
         resolve(true)
-      } catch (err) {
-        reject(err)
-      }
+      } catch (err) { reject(err) }
     })
   }
 
@@ -82,9 +80,7 @@ export class Trie extends TrieNode {
       try {
         this.insertWordHelper(this, word)
         resolve(true)
-      } catch (err) {
-        reject(err)
-      }
+      } catch (err) { reject(err) }
     })
   }
 
@@ -94,19 +90,14 @@ export class Trie extends TrieNode {
       try {
         const remainingTree = this.getRemainingTree(word)
         if(remainingTree) this.allWordsHelper(word, remainingTree)
-
         resolve(this.words)
-      } catch (err) {
-        reject(err)
-      }
+      } catch (err) { reject(err) }
     })
   }
 
   insertWordHelper(node: TrieNode, str: string) {
     if(!node.getChild(str[0])) node.setChild(str[0])
-
     if(str.length == 1) node.getChild(str[0]).setEnd(true)
-    
     if(str.length > 1) this.insertWordHelper(node.getChild(str[0]), str.slice(1))
   }
 
@@ -125,7 +116,7 @@ export class Trie extends TrieNode {
       const child = tree.getChildren()[field]
       const newStr = wordSoFar + child.getValue()
       if(child.getEnd()) this.words.push(newStr)
-
+      
       this.allWordsHelper(newStr, child)
     }
   }
