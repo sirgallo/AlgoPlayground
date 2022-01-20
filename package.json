@@ -7,10 +7,13 @@
   "author": "Sir Gallo",
   "license": "ISC",
   "dependencies": {
+    "@types/totp-generator": "^0.0.3",
     "dotenv": "^10.0.0",
     "fs": "^0.0.1-security",
     "grunt": "^1.4.1",
     "grunt-ts": "^6.0.0-beta.22",
+    "otpauth": "^7.0.9",
+    "totp-generator": "^0.0.13",
     "typescript": "^4.5.2",
     "utils": "^0.2.2"
   },
