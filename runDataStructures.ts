@@ -5,6 +5,7 @@ import { testTrie } from './Tests/testTrie'
 import { FindTownJudge } from './Algorithms/FindTownJudge'
 
 import { WebScrapeProvider, IWebScrape } from './Misc/WebScrapeProvider'
+import { configs } from './Tests/testWebScrape'
 
 export class RunDataStructures {
   constructor() {}
@@ -47,26 +48,11 @@ new RunDataStructures()
   })
 */
 
-const configs: IWebScrape[] = [
-  {
-    url: 'https://astm.org',
-    selectors: [
-      {
-        text: 'product-item',
-        type: 'class'
-      }
-    ],
-    paginate: (baseurl, page, perPage) => { 
-      return `${baseurl}/catalogsearch/result/index/?p=${page}&q=standards&product_list_limit=${perPage}` 
-    },
-    perPage: 30
-  }
-];
 
 new WebScrapeProvider(configs)
   .runMultiUrl()
   .then(res => {
-    console.log(res)
+    console.log(JSON.stringify(res, null, 2))
     process.exit(0)
   })
   .catch(err => console.log(err))
