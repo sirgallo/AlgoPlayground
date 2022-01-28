@@ -1,12 +1,12 @@
 import * as OTPAUTH from 'otpauth'
 
 interface IOTPAuth {
-  issuer: string
-  label: string
-  algorithm: string
-  digits: number
-  period: number
-  secret: string
+  issuer?: string
+  label?: string
+  algorithm?: string
+  digits?: number
+  period?: number
+  secret?: string | OTPAUTH.Secret
 }
 
 export class OTPAuthProvider {
@@ -19,8 +19,8 @@ export class OTPAuthProvider {
   generateOnInterval(interval: number) {
     this.setToken()
     setInterval(() => {
-      try {
-        this.setToken()
+      try { 
+        this.setToken() 
       } catch (err) { console.log(`Error: ${err}`) }
     }, interval)
   }

@@ -4,6 +4,7 @@ import { Trie } from './DataStructures/Trie'
 import { testTrie } from './Tests/testTrie'
 import { FindTownJudge } from './Algorithms/FindTownJudge'
 
+import { WebScrapeProvider, IWebScrape } from './Misc/WebScrapeProvider'
 
 export class RunDataStructures {
   constructor() {}
@@ -29,28 +30,13 @@ export class RunDataStructures {
   }
 }
 
-async function f2() {
-  throw new Error('hi this is a test error')
-}
-
-async function f1() {
-  try {
-    await f2()
-  } catch (err) {
-    throw err
-  }
-}
-
-async function runTest(): Promise<boolean> {
-  await f1()
-  return true
-}
 /*
 runTest()
   .then()
   .catch(err => {
     console.log(err)
   })
+*/
 
 /*
 new RunDataStructures()
@@ -60,6 +46,26 @@ new RunDataStructures()
     console.log(err)
   })
 */
+
+const configs: IWebScrape[] = [
+  {
+    url: 'https://astm.org/',
+    selectors: [
+      {
+        text: 'pagebuilder-column',
+        type: 'class'
+      }
+    ]
+  }
+];
+
+new WebScrapeProvider(configs)
+  .runMultiUrl()
+  .then(res => {
+    console.log(res)
+    process.exit(0)
+  })
+  .catch(err => console.log(err))
 
 
 /*
@@ -76,6 +82,7 @@ new TOTPProvider('HELLOWORLD', testOpts)
 
 */
 
+/*
 import { OTPAuthProvider } from './Misc/OTPAuthProvider'
 
 const testOptsOTPAuth = {
@@ -89,3 +96,4 @@ const testOptsOTPAuth = {
 
 new OTPAuthProvider(testOptsOTPAuth)
   .generateOnInterval(5000)
+*/
