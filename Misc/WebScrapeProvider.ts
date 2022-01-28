@@ -41,12 +41,13 @@ export class WebScrapeProvider {
   async runMultiUrl() {
     const allResults = []
     const _browser = await this.runHeadless()
+
     for(const config of this.configs) {
       if(config.paginateOpts) allResults.push(await this.headlessPaginate(_browser, config))
       else allResults.push(await this.scrapePage(_browser, config.url, config.selectors))
     }
-    _browser.browser.close()
 
+    _browser.browser.close()
     return allResults
   }
 
@@ -74,9 +75,11 @@ export class WebScrapeProvider {
       console.log('Beginning pagination...')
       while(config.paginateOpts.endPage >= page || pageNext) {
         const formattedPath = config.paginateOpts.paginateFunc(config.url, page, config.paginateOpts.perPage)
+
         console.log(`Attempting page ${page}...`)
         console.log(`Next page url: ${pageNext ? formattedPath : 'ended' }`)
         const returnHtmlList: IReturnHtml[] = await this.scrapePage(_browser, formattedPath, config.selectors)
+        
         if (returnHtmlList.length > 0) { 
           resp.allPaginatedResults.push({
             url: formattedPath,
@@ -100,7 +103,6 @@ export class WebScrapeProvider {
     try {
       await _browser.page.goto(url)
       const elements: IReturnHtml[] = await _browser.page.evaluate( selectors => {
-
         const validateSelector = (selector: ISelector): string => selector.type === 'class' ? `.${selector.text}` : `#${selector.text}`
         const res = []
 
