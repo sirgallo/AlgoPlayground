@@ -27,7 +27,8 @@ export const configs: IWebScrape[] = [
       paginateFunc: (baseurl, page, perPage) => { 
         return `${baseurl}/catalogsearch/result/index/?p=${page}&q=standards` 
       },
-      startPage: 1
+      startPage: 1,
+      endPage: 5
     }
   }
 ];

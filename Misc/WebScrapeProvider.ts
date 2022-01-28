@@ -17,7 +17,7 @@ export interface IReturnPaginatedHtml {
 }
 
 export interface IReturnHtml {
-  item: any
+  innerHtml: any
 }
 
 interface IPaginateResults {
@@ -73,7 +73,7 @@ export class WebScrapeProvider {
       console.log('Navigating to base url...', config.url)
       await _browser.page.goto(config.url)
       console.log('Beginning pagination...')
-      while(config.paginateOpts.endPage >= page || pageNext) {
+      while(config.paginateOpts.endPage? config.paginateOpts.endPage >= page : pageNext) {
         const formattedPath = config.paginateOpts.paginateFunc(config.url, page, config.paginateOpts.perPage)
 
         console.log(`Attempting page ${page}...`)
