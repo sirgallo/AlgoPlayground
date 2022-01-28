@@ -4,7 +4,7 @@ import { Trie } from './DataStructures/Trie'
 import { testTrie } from './Tests/testTrie'
 import { FindTownJudge } from './Algorithms/FindTownJudge'
 
-import { WebScrapeProvider, IWebScrape } from './Misc/WebScrapeProvider'
+import { WebScrapeProvider } from './Misc/WebScrapeProvider'
 import { configs } from './Tests/testWebScrape'
 
 export class RunDataStructures {
@@ -47,7 +47,6 @@ new RunDataStructures()
     console.log(err)
   })
 */
-
 
 new WebScrapeProvider(configs)
   .runMultiUrl()

@@ -4,7 +4,7 @@ export interface IWebScrape {
   url: string
   selectors: ISelector[]
   paginateOpts?: {
-    paginateFunc(baseUrl: string, page: number, perPage: number): string
+    paginateFunc(baseUrl: string, page: number, perPage?: number): string
     perPage?: number
     startPage?: number
     endPage?: number
@@ -27,7 +27,7 @@ interface IPaginateResults {
 
 interface ISelector {
   text: string
-  type: 'class' | 'element'
+  type: string
 }
 
 interface IBrowser {
@@ -37,6 +37,10 @@ interface IBrowser {
 
 export class WebScrapeProvider {
   constructor(private configs: IWebScrape[], private headless: boolean = true) {}
+
+  getConfigs() {
+    return this.configs
+  }
 
   async runMultiUrl() {
     const allResults = []

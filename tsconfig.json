@@ -17,6 +17,7 @@
       "ES2018",
       "dom"
     ],
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "resolveJsonModule": true
   }
 }
