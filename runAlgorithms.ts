@@ -1,3 +1,0 @@
-/*
-  Currently a stub
-*/
