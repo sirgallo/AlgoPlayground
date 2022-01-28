@@ -69,8 +69,10 @@ export class WebScrapeProvider {
     let pageNext = true
     let page = 1
     try {
+      console.log('Navigating to base url...', config.url)
       await _browser.page.goto(config.url)
-      while(pageNext) {
+      console.log('Beginning pagination...')
+      while(config.paginateOpts.endPage >= page || pageNext) {
         const formattedPath = config.paginateOpts.paginateFunc(config.url, page, config.paginateOpts.perPage)
         console.log(`Attempting page ${page}...`)
         console.log(`Next page url: ${pageNext ? formattedPath : 'ended' }`)
