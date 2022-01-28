@@ -46,8 +46,8 @@ export class WebScrapeProvider {
     const allResults = []
     const _browser = await this.runHeadless()
 
-    for(const config of this.configs) {
-      if(config.paginateOpts) allResults.push(await this.headlessPaginate(_browser, config))
+    for (const config of this.configs) {
+      if (config.paginateOpts) allResults.push(await this.headlessPaginate(_browser, config))
       else allResults.push(await this.scrapePage(_browser, config.url, config.selectors))
     }
 
@@ -77,7 +77,7 @@ export class WebScrapeProvider {
       console.log('Navigating to base url...', config.url)
       await _browser.page.goto(config.url)
       console.log('Beginning pagination...')
-      while(config.paginateOpts.endPage? config.paginateOpts.endPage >= page : pageNext) {
+      while (config.paginateOpts.endPage? config.paginateOpts.endPage >= page : pageNext) {
         const formattedPath = config.paginateOpts.paginateFunc(config.url, page, config.paginateOpts.perPage)
 
         console.log(`Attempting page ${page}...`)
@@ -89,7 +89,6 @@ export class WebScrapeProvider {
             url: formattedPath,
             htmlList: returnHtmlList
           })
-
         } else pageNext = false
         
         ++page
@@ -110,7 +109,7 @@ export class WebScrapeProvider {
         const validateSelector = (selector: ISelector): string => selector.type === 'class' ? `.${selector.text}` : `#${selector.text}`
         const res = []
 
-        for(const selector of selectors) {
+        for (const selector of selectors) {
           const elem = document.querySelectorAll(validateSelector(selector))
           elem.forEach( item => {
             res.push({
