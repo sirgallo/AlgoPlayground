@@ -49,13 +49,17 @@ new RunDataStructures()
 
 const configs: IWebScrape[] = [
   {
-    url: 'https://astm.org/',
+    url: 'https://astm.org',
     selectors: [
       {
-        text: 'pagebuilder-column',
+        text: 'product-item',
         type: 'class'
       }
-    ]
+    ],
+    paginate: (baseurl, page, perPage) => { 
+      return `${baseurl}/catalogsearch/result/index/?p=${page}&q=standards&product_list_limit=${perPage}` 
+    },
+    perPage: 30
   }
 ];
 
