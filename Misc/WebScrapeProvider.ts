@@ -2,10 +2,10 @@ import puppeteer from 'puppeteer'
 
 export interface IWebScrape {
   url: string
-  selectors: ISelectors[]
+  selectors: ISelector[]
 }
 
-interface ISelectors {
+interface ISelector {
   text: string
   type: 'class' | 'element'
 }
@@ -16,7 +16,6 @@ export class WebScrapeProvider {
   async runMultiUrl() {
     const allResults = []
     for(const config of this.configs) {
-      console.log(config.selectors)
       allResults.push(
         await this.runHeadlessChrome(config.url, config.selectors)
       )
@@ -25,9 +24,7 @@ export class WebScrapeProvider {
     return allResults
   }
 
-  private async runHeadlessChrome(url: string, selectors: ISelectors[]): Promise<any[]> {
-
-    console.log('hi', selectors)
+  private async runHeadlessChrome(url: string, selectors: ISelector[]): Promise<any[]> {
     const browser = await puppeteer.launch({ 
       args: ['--no-sandbox', '--disable-setuid-sandbox'], 
       headless: true
@@ -37,7 +34,7 @@ export class WebScrapeProvider {
     await page.goto(url)
     const elements = await page.evaluate( selectors => {
 
-      const validateSelector = (selector: ISelectors) => selector.type === 'class' ? `.${selector.text}` : `#${selector.text}`
+      const validateSelector = (selector: ISelector) => selector.type === 'class' ? `.${selector.text}` : `#${selector.text}`
       const res = []
 
       for(const selector of selectors) {
