@@ -10,16 +10,18 @@ export const configs: IWebScrape[] = [
         type: 'class'
       }
     ],
-    paginate: (baseurl, page, perPage) => { 
-      return `${baseurl}/Page/${page}` 
+    paginateOpts: {
+      paginateFunc: (baseurl, page, perPage) => { 
+        return `${baseurl}/Page/${page}` 
+      }
     }
-  }
+  },
   */
   {
     url: 'https://www.astm.org',
     selectors: [
       {
-        text: 'product-item',
+        text: 'up-date',
         type: 'class'
       }
     ],
@@ -27,8 +29,7 @@ export const configs: IWebScrape[] = [
       paginateFunc: (baseurl, page, perPage) => { 
         return `${baseurl}/catalogsearch/result/index/?p=${page}&q=standards` 
       },
-      startPage: 1,
-      endPage: 5
+      startPage: 1
     }
   }
 ];

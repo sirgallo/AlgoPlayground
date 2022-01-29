@@ -11,18 +11,18 @@ export interface IWebScrape {
   }
 }
 
-export interface IReturnPaginatedHtml {
-  allPaginatedResults: IPaginateResults[]
+export interface IReturnHtml {
+  allPaginatedResults: IResults[]
   errorStack: any[]
 }
 
-export interface IReturnHtml {
+export interface IInnerHtml {
   innerHtml: any
 }
 
-interface IPaginateResults {
+interface IResults {
   url: string
-  htmlList: IReturnHtml[]
+  htmlList: IInnerHtml[]
 }
 
 interface ISelector {
@@ -44,18 +44,18 @@ export class WebScrapeProvider {
 
   async runMultiUrl() {
     const allResults = []
-    const _browser = await this.runHeadless()
+    const _browser: IBrowser = await this.runHeadless()
 
     for (const config of this.configs) {
       if (config.paginateOpts) allResults.push(await this.headlessPaginate(_browser, config))
-      else allResults.push(await this.scrapePage(_browser, config.url, config.selectors))
+      else allResults.push(await this.headlessSingle(_browser, config))
     }
 
     _browser.browser.close()
     return allResults
   }
 
-  private async runHeadless(): Promise<{ browser: puppeteer.Browser, page: puppeteer.Page }> {
+  private async runHeadless(): Promise<IBrowser> {
     const browser = await puppeteer.launch({ 
       args: ['--no-sandbox', '--disable-setuid-sandbox'], 
       headless: this.headless
@@ -65,8 +65,28 @@ export class WebScrapeProvider {
     return { browser, page }
   }
 
-  private async headlessPaginate(_browser: IBrowser, config: IWebScrape): Promise<IReturnPaginatedHtml> {
-    const resp = {
+  private async headlessSingle(_browser: IBrowser, config: IWebScrape): Promise<IReturnHtml> {
+    const resp: IReturnHtml = {
+      allPaginatedResults: [],
+      errorStack: []
+    }
+
+    try {
+      const result = await this.scrapePage(_browser, config.url, config.selectors)
+      resp.allPaginatedResults.push({
+        url: config.url,
+        htmlList: result
+      })
+    } catch (err) { 
+      console.log('Error stack:', err)
+      resp.errorStack.push(err)
+    }
+
+    return resp
+  }
+
+  private async headlessPaginate(_browser: IBrowser, config: IWebScrape): Promise<IReturnHtml> {
+    const resp: IReturnHtml = {
       allPaginatedResults: [],
       errorStack: []
     }
@@ -82,7 +102,7 @@ export class WebScrapeProvider {
 
         console.log(`Attempting page ${page}...`)
         console.log(`Next page url: ${pageNext ? formattedPath : 'ended' }`)
-        const returnHtmlList: IReturnHtml[] = await this.scrapePage(_browser, formattedPath, config.selectors)
+        const returnHtmlList: IInnerHtml[] = await this.scrapePage(_browser, formattedPath, config.selectors)
         
         if (returnHtmlList.length > 0) { 
           resp.allPaginatedResults.push({
@@ -102,10 +122,10 @@ export class WebScrapeProvider {
     return resp
   }
 
-  private async scrapePage(_browser: IBrowser, url: string, selectors: ISelector[]): Promise<IReturnHtml[]> {
+  private async scrapePage(_browser: IBrowser, url: string, selectors: ISelector[]): Promise<IInnerHtml[]> {
     try {
       await _browser.page.goto(url)
-      const elements: IReturnHtml[] = await _browser.page.evaluate( selectors => {
+      const elements: IInnerHtml[] = await _browser.page.evaluate( selectors => {
         const validateSelector = (selector: ISelector): string => selector.type === 'class' ? `.${selector.text}` : `#${selector.text}`
         const res = []
 
