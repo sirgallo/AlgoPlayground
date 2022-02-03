@@ -1,5 +1,7 @@
 import puppeteer from 'puppeteer'
 
+type UnParsedString = string
+
 export interface IWebScrape {
   url: string
   selectors: ISelector[]
@@ -12,22 +14,23 @@ export interface IWebScrape {
 }
 
 export interface IReturnHtml {
-  allPaginatedResults: IResults[]
+  pages: IResults[]
   errorStack: any[]
 }
 
 export interface IInnerHtml {
-  innerHtml: any
+  elementText: UnParsedString
 }
 
 interface IResults {
   url: string
   htmlList: IInnerHtml[]
+  timeStamp: Date
 }
 
 interface ISelector {
   text: string
-  type: string
+  type: 'class' | 'element'
 }
 
 interface IBrowser {
@@ -42,8 +45,8 @@ export class WebScrapeProvider {
     return this.configs
   }
 
-  async runMultiUrl() {
-    const allResults = []
+  async runMultiUrl(): Promise<IReturnHtml[]> {
+    const allResults: IReturnHtml[] = []
     const _browser: IBrowser = await this.runHeadless()
 
     for (const config of this.configs) {
@@ -67,15 +70,16 @@ export class WebScrapeProvider {
 
   private async headlessSingle(_browser: IBrowser, config: IWebScrape): Promise<IReturnHtml> {
     const resp: IReturnHtml = {
-      allPaginatedResults: [],
+      pages: [],
       errorStack: []
     }
 
     try {
       const result = await this.scrapePage(_browser, config.url, config.selectors)
-      resp.allPaginatedResults.push({
+      resp.pages.push({
         url: config.url,
-        htmlList: result
+        htmlList: result,
+        timeStamp: new Date()
       })
     } catch (err) { 
       console.log('Error stack:', err)
@@ -87,7 +91,7 @@ export class WebScrapeProvider {
 
   private async headlessPaginate(_browser: IBrowser, config: IWebScrape): Promise<IReturnHtml> {
     const resp: IReturnHtml = {
-      allPaginatedResults: [],
+      pages: [],
       errorStack: []
     }
     
@@ -105,9 +109,10 @@ export class WebScrapeProvider {
         const returnHtmlList: IInnerHtml[] = await this.scrapePage(_browser, formattedPath, config.selectors)
         
         if (returnHtmlList.length > 0) { 
-          resp.allPaginatedResults.push({
+          resp.pages.push({
             url: formattedPath,
-            htmlList: returnHtmlList
+            htmlList: returnHtmlList,
+            timeStamp: new Date()
           })
         } else pageNext = false
         
@@ -116,7 +121,7 @@ export class WebScrapeProvider {
     } catch (err) {
       console.log('Could be end?', err)
       pageNext = false
-      resp.errorStack.push(err)
+      resp.errorStack.push({ err })
     }
 
     return resp
@@ -133,7 +138,7 @@ export class WebScrapeProvider {
           const elem = document.querySelectorAll(validateSelector(selector))
           elem.forEach( item => {
             res.push({
-              innerHtml: item.innerHTML
+              elementText: item.textContent?.trimLeft().trimRight()
             })
           })
         }

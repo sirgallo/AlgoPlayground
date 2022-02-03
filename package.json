@@ -2,7 +2,8 @@
   "name": "playground",
   "version": "1.0.0",
   "scripts": {
-    "build": "grunt --gruntfile gruntfile.js"
+    "build": "grunt --gruntfile gruntfile.js",
+    "start": "node ./dist/App.js"
   },
   "author": "Sir Gallo",
   "license": "ISC",

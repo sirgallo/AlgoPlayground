@@ -1,7 +1,6 @@
 import { IWebScrape } from '../Misc/WebScrapeProvider'
 
 export const configs: IWebScrape[] = [
-  /*
   {
     url: 'https://www.anandtech.com',
     selectors: [
@@ -13,10 +12,12 @@ export const configs: IWebScrape[] = [
     paginateOpts: {
       paginateFunc: (baseurl, page, perPage) => { 
         return `${baseurl}/Page/${page}` 
-      }
+      },
+      startPage: 1,
+      endPage: 5
     }
-  },
-  */
+  }
+  /*
   {
     url: 'https://www.astm.org',
     selectors: [
@@ -32,4 +33,5 @@ export const configs: IWebScrape[] = [
       startPage: 1
     }
   }
-];
+  */
+]
