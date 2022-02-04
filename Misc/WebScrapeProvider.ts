@@ -1,4 +1,16 @@
-import puppeteer from 'puppeteer'
+import { Page, Browser } from 'puppeteer'
+
+export async function dynamicWebProvider(
+  moduleName: string, 
+  configs: IWebScrape[], 
+  headless?: boolean,
+): Promise<IReturnHtml[]> {
+  if (process.env.PUPPETEERVERSION === 'puppeteer' || 'puppeteer-core') {
+    const puppeteer = await require(moduleName)
+    return await new WebScrapeProvider(puppeteer, configs, headless).runMultiUrl()
+  }
+}
+
 
 type UnParsedString = string
 
@@ -34,12 +46,12 @@ interface ISelector {
 }
 
 interface IBrowser {
-  browser: puppeteer.Browser
-  page: puppeteer.Page
+  browser: Browser
+  page: Page
 }
 
 export class WebScrapeProvider {
-  constructor(private configs: IWebScrape[], private headless: boolean = true) {}
+  constructor(private puppeteer: any, private configs: IWebScrape[], private headless: boolean = true) {}
 
   getConfigs() {
     return this.configs
@@ -47,7 +59,7 @@ export class WebScrapeProvider {
 
   async runMultiUrl(): Promise<IReturnHtml[]> {
     const allResults: IReturnHtml[] = []
-    const _browser: IBrowser = await this.runHeadless()
+    const _browser: IBrowser = process.env.PUPPETEERVERSION === 'puppeteer' ? await this.runHeadlessUnix() : await this.runHeadlessUniversal()
 
     for (const config of this.configs) {
       if (config.paginateOpts) allResults.push(await this.headlessPaginate(_browser, config))
@@ -58,8 +70,19 @@ export class WebScrapeProvider {
     return allResults
   }
 
-  private async runHeadless(): Promise<IBrowser> {
-    const browser = await puppeteer.launch({ 
+  private async runHeadlessUnix(): Promise<IBrowser> {
+    const browser = await this.puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'], 
+      headless: this.headless
+    })
+    const page = await browser.newPage()
+
+    return { browser, page }
+  }
+
+  private async runHeadlessUniversal(): Promise<IBrowser> {
+    const browser = await this.puppeteer.launch({
+      executablePath: process.env.BROWSEREXECPATH,
       args: ['--no-sandbox', '--disable-setuid-sandbox'], 
       headless: this.headless
     })

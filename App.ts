@@ -1,10 +1,14 @@
 #!/usr/bin/env node
+const path = require('path')
+import { config } from 'dotenv'
+
+config({ path: '.env' })
 
 import { Trie } from './DataStructures/Trie'
 import { testTrie } from './Tests/testTrie'
 import { FindTownJudge } from './Algorithms/FindTownJudge'
 
-import { WebScrapeProvider } from './Misc/WebScrapeProvider'
+import { dynamicWebProvider } from './Misc/WebScrapeProvider'
 import { configs } from './Tests/testWebScrape'
 
 export class RunDataStructures {
@@ -48,8 +52,7 @@ new RunDataStructures()
   })
 */
 
-new WebScrapeProvider(configs)
-  .runMultiUrl()
+dynamicWebProvider(process.env.PUPPETEERVERSION, configs)
   .then(res => {
     console.log(JSON.stringify(res, null, 2))
     process.exit(0)
